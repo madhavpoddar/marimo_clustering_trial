@@ -66,7 +66,7 @@ def _(mo, pd):
         "str_option": ["Easy", "Medium", "Hard"],
         "N_images": [30, 100, 250],
         "tsne_perplexity": [2, 1.0, 1.4],
-        "img_size": [8, 2, 2]
+        "img_size": [8, 4, 2]
     })
     df_difficulty_opts["str_radio"] = df_difficulty_opts.apply(lambda row: row["str_option"]+" ("+str(row["N_images"])+" items)", axis=1)
 
@@ -88,6 +88,12 @@ def _(N_images_options_radio, mo, os):
     return
 
 
+@app.cell
+def _(mo):
+    mo.md("""### Manual clustering task""")
+    return
+
+
 @app.cell(hide_code=True)
 def _(
     N_images_options_radio,
@@ -106,11 +112,11 @@ def _(
     # Extract the first N_images and labels
     images = []
     labels = []
-    img_size = 8
 
     selected_option_index = df_difficulty_opts.index[df_difficulty_opts['str_radio'] == N_images_options_radio.value][0]
     N_images = df_difficulty_opts.iloc[selected_option_index]["N_images"]
     tsne_perplexity = df_difficulty_opts.iloc[selected_option_index]["tsne_perplexity"]
+    img_size = df_difficulty_opts.iloc[selected_option_index]["img_size"]
 
     for i in range(N_images):
         image, label = dataset[i]
